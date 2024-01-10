@@ -25,7 +25,7 @@ const Overview = () => {
       type: 'column'
     },
     title: {
-      text: 'Global Temperature and Population'
+      text: 'Global Population'
     },
     xAxis: {
       type: "category",
@@ -36,7 +36,7 @@ const Overview = () => {
 
       {
         name: "Population",
-        opposite: true,
+        opposite: false,
         min: 0,
         max: 8000000000
       }
