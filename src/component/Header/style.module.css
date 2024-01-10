@@ -1,0 +1,26 @@
+.header {
+  height: 50px;
+  background-color: rgb(255, 218, 149);
+  display: flex;
+  justify-content: left;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.header_content {
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.header_content > a {
+  text-decoration: none;
+
+  color: black;
+  background-color: rgb(255, 204, 109);
+  padding: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+}
