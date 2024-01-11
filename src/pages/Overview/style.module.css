@@ -2,41 +2,26 @@
   margin: 30px;
   font-size: 3.5rem;
   font-weight: 600;
+  display: flex;
+  justify-content: center;
 }
 
-.overview_body{
+.overview_body {
   display: flex;
   justify-content: center;
   align-items: center;
-
 }
-.amount_infor_cell{
+.number_of_regions_cell, .year_range_cell {
   height: 100px;
-  width: 140px;
-  background-color: rgb(255, 218, 149);
+  width: 250px;
+  background-color: var(--lightOrange);
   margin: 10px;
+  padding: 10px;
   font-size: 0.9rem;
   font-weight: 600;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   border-radius: 5px;
-}
-.year_range_cell{
-  height: 100px;
-  width: 200px;
-  background-color: rgb(255, 218, 149);
-  margin: 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-}
-
-.world_infor_chart {
-  margin: 30px;
 }

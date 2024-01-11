@@ -6,8 +6,8 @@ const Header = () => {
   return (
     <div className={style.header}>
       <div className={`col-2 ${style.header_content}`}>
-      <Link to='/overview'> Overview </Link>
-      <Link to='/'> Detail </Link>
+        <Link to='/overview'>Overview</Link>
+        <Link to='/detail'>Detail</Link>
       </div>
     </div>
   )

@@ -17,11 +17,11 @@ export const overviewSlice = createSlice({
         start: 0,
         end: 0
       },
-      globalTemp: {
+      global: {
         start: 0,
         end: 0
       },
-      otherTemp: {
+      other: {
         start: 0,
         end: 0
       }
@@ -34,13 +34,14 @@ export const overviewSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(getWorldPopulation.fulfilled, (state, action) => {
       state.worldPopulation = action.payload
-
     }).addCase(getAllCountriesPopulation.fulfilled, (state, action) => {
       state.allCountriesPopulation = action.payload
     }).addCase(getNumberOfRegions.fulfilled, (state, action) => {
       state.numberOfRegions = action.payload;
     }).addCase(getDataYearRange.fulfilled, (state, action) => {
       state.dataYearRange = action.payload
+    }).addCase(getGlobalTempData.fulfilled, (state, action) => {
+      state.worldTemperature = action.payload
     })
   }
 })
@@ -64,55 +65,42 @@ export const getAllCountriesPopulation = createAsyncThunk('overview/getAllCountr
 export const getGlobalTempData = createAsyncThunk('overview/getGlobalTempData', async () => {
   const response = await axios({
     method: "get",
-    
+    url: "http://localhost:8080/api/global-temp/get-all"
   })
+  return response.data;
 })
 
 export const getNumberOfRegions = createAsyncThunk('overview/getNumberOfRegions', async () => {
-  const numberOfCitiesResponse = await axios({
-    method: 'get',
-    url: 'http://localhost:8080/api/city/number-of-cities'
-  })
-  const numberOfStatesResponse = await axios({
-    method: 'get',
-    url: 'http://localhost:8080/api/state/number-of-states'
-  })
-  const numberOfCountriesResponse = await axios({
-    method: 'get',
-    url: 'http://localhost:8080/api/country/number-of-countries'
-  })
+  const [
+    numberOfCitiesResponse,
+    numberOfStatesResponse,
+    numberOfCountriesResponse
+  ] = await Promise.all([
+    axios.get('http://localhost:8080/api/city/number-of-cities'),
+    axios.get('http://localhost:8080/api/state/number-of-states'),
+    axios.get('http://localhost:8080/api/country/number-of-countries')
+  ]);
   return {
     cities: numberOfCitiesResponse.data,
     states: numberOfStatesResponse.data,
     countries: numberOfCountriesResponse.data
-  }
+  };
 })
 
 export const getDataYearRange = createAsyncThunk('overview/getDataYearRange', async () => {
-  const populationResponse = await axios({
-    method: "get",
-    url: "http://localhost:8080/api/population/year-range"
-  })
-  const globalTempResponse = await axios({
-    method: "get",
-    url: "http://localhost:8080/api/global-temp/year-range"
-  })
-  const otherTempResponse = await axios({
-    method: "get",
-    url: "http://localhost:8080/api/temp/year-range"
-  })
+  const [
+    populationResponse,
+    globalTempResponse,
+    otherTempResponse
+  ] = await Promise.all([
+    axios.get('http://localhost:8080/api/population/year-range'),
+    axios.get('http://localhost:8080/api/global-temp/year-range'),
+    axios.get('http://localhost:8080/api/temp/year-range')
+  ]);
+
   return {
-    population: {
-      start: populationResponse.data[0],
-      end: populationResponse.data[1]
-    },
-    globalTemp: {
-      start: globalTempResponse.data[0],
-      end: globalTempResponse.data[1]
-    },
-    otherTemp: {
-      start: otherTempResponse.data[0],
-      end: otherTempResponse.data[1]
-    }
-  }
+    population: {...populationResponse.data},
+    global: {...globalTempResponse.data},
+    other: {...otherTempResponse.data}
+  };
 })
