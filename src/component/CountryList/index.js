@@ -1,36 +1,95 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import style from './style.module.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { useDispatch } from 'react-redux';
+import { detailSlice, getRegionTemperatureAndPopulation } from '../../service/slices/detailviewSlice';
 const CountryList = (props) => {
-  
-  const sortIcon = {
-    up: <i class="bi bi-arrow-up"></i>,
-    down: <i class="bi bi-arrow-down"></i>,
-    bothDir: <i class="bi bi-arrow-down-up"></i>
-  }
+
+  const {countryList, keyWord} = props;
+
+  const dispatch = useDispatch()
 
   const [sortState, setSortState] = useState({
-    isSorted: true,
-    criteria: "orderByName",
-    status: "asc"
+    orderByName: "asc",
+    orderByPopulation: "noOrder",
+    orderByTemperature: "noOrder" 
   })
 
-  const {countryList} = props;
+  const [currentCountryList, setCurrentCountryList] = useState([])
+
+  const sortIcon = {
+    asc: <i className="bi bi-arrow-up"></i>,
+    desc: <i className="bi bi-arrow-down"></i>,
+    noOrder: <i className="bi bi-arrow-down-up"></i>
+  }
+
+  const handleSort = (criteria) => {
+    const newSortState = {...sortState}
+    
+    Object.keys(newSortState).forEach((item) => {
+      if (item !== criteria){
+        newSortState[item] = "noOrder"
+      }
+      else {
+        newSortState[item] === "asc" ? newSortState[item] = "desc" : newSortState[item] = "asc" 
+      }
+    })
+    setSortState(newSortState)
+  } 
+  const handleCurrentCountry = (item) => {
+    dispatch(getRegionTemperatureAndPopulation(item))
+    dispatch(detailSlice.actions.setRegion(item))
+  }
+
+  useEffect(() => {
+    setCurrentCountryList(countryList.orderByName.asc)
+  }, [countryList])
+
+  useEffect(() => {
+    for(let key in sortState) {
+      if(sortState[key] !== "noOrder"){
+        setCurrentCountryList(countryList[key][sortState[key]].filter((country) => {
+          return country.toLowerCase().includes(keyWord.toLowerCase());
+        }))
+        break;
+      }
+    }
+  }, [sortState, keyWord])
+
+  
   return (
     <div className={style.country_list}>
       <div className={`row ${style.sort_criteria}`}>
-        <div className={`col-3 btn btn-warning ${style.sort_criteria_cell}`}>
-          Name
-          {sortIcon.up}
+        <div className={`col-6 btn btn-warning ${style.sort_criteria_cell}`}
+          onClick={() => handleSort("orderByName")}
+        >
+          Name &nbsp;
+          {sortIcon[sortState["orderByName"]]}
         </div>
-        <div className={`col-4 btn btn-warning ${style.sort_criteria_cell}`}>Population</div>
-        <div className={`col-4 btn btn-warning ${style.sort_criteria_cell}`}>Temperature</div>
+
+        <div className={`col-6 btn btn-warning ${style.sort_criteria_cell}`}
+          onClick={() => handleSort("orderByPopulation")}
+        >
+          Population &nbsp;
+          {sortIcon[sortState["orderByPopulation"]]}
+        </div>
+        
+        <div className={`col-6 btn btn-warning ${style.sort_criteria_cell}`}
+          onClick={() => handleSort("orderByTemperature")}
+        >
+          Temperature &nbsp;
+          {sortIcon[sortState["orderByTemperature"]]}
+        </div>
       </div>
       <div className={style.country_list_body}> 
         <ul>
-          {countryList.orderByName.asc.map((item) => {
+          {currentCountryList.map((item, index) => {
             return(
-              <div>{item}</div>
+              <div 
+                key={index} 
+                className={style.country_list_item}
+                onClick={() => handleCurrentCountry(item)}
+              >{item}</div>
             )
           })}
         </ul>

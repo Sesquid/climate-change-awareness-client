@@ -18,13 +18,25 @@ export const detailSlice = createSlice({
         desc: []
       }
     },
+    currentRegionInforMation:{
+      region: "",
+      temperatureList: [],
+      populationList: []
+    }
   },
   reducers:{
+    setRegion(state, action){
+      state.currentRegionInforMation.region = action.payload
+    }
   },
   extraReducers:builder => {
     builder.addCase(getAllCountriesList.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.countryList = action.payload;
+    })
+    .addCase(getRegionTemperatureAndPopulation.fulfilled, (state, action) => {
+      console.log(action.payload)
+      state.currentRegionInforMation.temperatureList = action.payload.currentRegionInforMation.temperatureList;
+      state.currentRegionInforMation.populationList = action.payload.currentRegionInforMation.populationList;
     })
   }
 })
@@ -59,6 +71,27 @@ export const getAllCountriesList = createAsyncThunk('detail/getAllCountriesList'
     orderByTemperature: {
       asc: [...countryListOrderByTemperatureAsc.data],
       desc: [...countryListOrderByTemperatureDesc.data]
+    }
+  };
+})
+
+export const getRegionTemperatureAndPopulation = createAsyncThunk('detail/getRegionTemperatureAndPopulation', async (region) => {
+  const [
+    temperatureList,
+    populationList
+  ] = region !== 'World' ? await Promise.all([
+    axios.get(`http://localhost:8080/api/temp/by-country?countryName=${region}`),
+    axios.get(`http://localhost:8080/api/population/by-country?countryName=${region}`),
+  ]): await Promise.all([
+    axios.get(`http://localhost:8080/api/global-temp/get-all`),
+    axios.get(`http://localhost:8080/api/population/world-population`),
+  ]);
+
+
+  return {
+    currentRegionInforMation:{
+      temperatureList: temperatureList.data,
+      populationList: populationList.data
     }
   };
 })

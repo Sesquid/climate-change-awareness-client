@@ -4,3 +4,4 @@ export const allCountriesPopulationSelector = state => state.overview.allCountri
 export const dataYearRangeSelector = state => state.overview.dataYearRange;
 export const worldTemperatureSelector = state => state.overview.worldTemperature;
 export const countryListSelector = state => state.detail.countryList;
+export const regionTemperatureAndPopulationSelector = state => state.detail.currentRegionInforMation;

@@ -2,7 +2,34 @@
   padding: 10px;
   margin: 20px;
 }
-.sort_criteria_cell{
-  margin: 5px;
-  
+.sort_criteria_cell {
+  margin: 5px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+ul {
+  padding: 0px !important;
+}
+
+.country_list_body {
+  height: 90vh;
+  overflow-y: scroll;
+}
+.country_list_item {
+  margin: 10px 0;
+  background-color: var(--lightOrange);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.country_list_item:hover {
+  cursor: pointer;
+  box-shadow: 2px 2px 4px gray;
+}
+.country_list_item:active, .sort_criteria_cell:active {
+  transform: scale(0.98);
 }
