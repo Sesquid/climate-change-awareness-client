@@ -1,16 +1,15 @@
-.detail_search_bar{
-  margin: 30px;
+.detail_search_bar {
+  /* margin: 30px; */
   display: flex;
   justify-content: center;
 }
 
 .detail_search_bar > input {
-  width: 90%;
+  width: 95%;
   height: 35px;
   border-radius: 5px;
   padding: 10px;
   border: 2px solid var(--lightOrange);
-
 }
 
 input:focus {
@@ -26,10 +25,14 @@ input:focus {
   margin: 20px 0px;
   font-size: 2rem;
   font-weight: 600;
-
 }
 
 .year_select {
   display: flex;
   justify-content: space-around;
+}
+
+select,
+button {
+  margin-right: 10px !important;
 }

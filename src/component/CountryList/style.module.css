@@ -30,6 +30,7 @@ ul {
   cursor: pointer;
   box-shadow: 2px 2px 4px gray;
 }
-.country_list_item:active, .sort_criteria_cell:active {
+.country_list_item:active,
+.sort_criteria_cell:active {
   transform: scale(0.98);
 }

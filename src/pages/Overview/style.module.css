@@ -1,5 +1,5 @@
 .overview_title {
-  margin: 30px; 
+  margin: 30px;
   font-size: 3.5rem;
   font-weight: 600;
   display: flex;
@@ -11,7 +11,8 @@
   justify-content: center;
   align-items: center;
 }
-.number_of_regions_cell, .year_range_cell {
+.number_of_regions_cell,
+.year_range_cell {
   height: 100px;
   width: 250px;
   background-color: var(--lightOrange);

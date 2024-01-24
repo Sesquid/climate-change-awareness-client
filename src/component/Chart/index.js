@@ -4,7 +4,7 @@ import React from 'react'
 import style from './style.module.css'
 
 const CustomChart = (props) => {
-  const {options} = props
+  const { options } = props
   return (
     <div className={style.chart}>
       <HighchartsReact highcharts={Highcharts} options={options}></HighchartsReact>

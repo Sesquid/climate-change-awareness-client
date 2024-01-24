@@ -1,18 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './style.module.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { useDispatch } from 'react-redux';
-import { detailSlice, getRegionTemperatureAndPopulation } from '../../service/slices/detailviewSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { detailSlice } from '../../service/slices/detailviewSlice';
+import { currentRegionSelector } from '../../service/selector/selector';
 const CountryList = (props) => {
 
-  const {countryList, keyWord} = props;
+  const { countryList, keyWord } = props;
+
+  const currentRegion = useSelector(currentRegionSelector);
 
   const dispatch = useDispatch()
-
   const [sortState, setSortState] = useState({
     orderByName: "asc",
     orderByPopulation: "noOrder",
-    orderByTemperature: "noOrder" 
+    orderByTemperature: "noOrder"
   })
 
   const [currentCountryList, setCurrentCountryList] = useState([])
@@ -24,21 +26,23 @@ const CountryList = (props) => {
   }
 
   const handleSort = (criteria) => {
-    const newSortState = {...sortState}
-    
+    const newSortState = { ...sortState }
+
     Object.keys(newSortState).forEach((item) => {
-      if (item !== criteria){
+      if (item !== criteria) {
         newSortState[item] = "noOrder"
       }
       else {
-        newSortState[item] === "asc" ? newSortState[item] = "desc" : newSortState[item] = "asc" 
+        newSortState[item] === "asc" ? newSortState[item] = "desc" : newSortState[item] = "asc"
       }
     })
     setSortState(newSortState)
-  } 
+  }
   const handleCurrentCountry = (item) => {
-    dispatch(getRegionTemperatureAndPopulation(item))
-    dispatch(detailSlice.actions.setRegion(item))
+    dispatch(detailSlice.actions.setRegionInformation({
+      ...currentRegion, countryName: item, regionType: 'country',
+      latitude: "", longtitude: ""
+    }))
   }
 
   useEffect(() => {
@@ -46,8 +50,8 @@ const CountryList = (props) => {
   }, [countryList])
 
   useEffect(() => {
-    for(let key in sortState) {
-      if(sortState[key] !== "noOrder"){
+    for (let key in sortState) {
+      if (sortState[key] !== "noOrder") {
         setCurrentCountryList(countryList[key][sortState[key]].filter((country) => {
           return country.toLowerCase().includes(keyWord.toLowerCase());
         }))
@@ -56,7 +60,7 @@ const CountryList = (props) => {
     }
   }, [sortState, keyWord])
 
-  
+
   return (
     <div className={style.country_list}>
       <div className={`row ${style.sort_criteria}`}>
@@ -73,7 +77,7 @@ const CountryList = (props) => {
           Population &nbsp;
           {sortIcon[sortState["orderByPopulation"]]}
         </div>
-        
+
         <div className={`col-6 btn btn-warning ${style.sort_criteria_cell}`}
           onClick={() => handleSort("orderByTemperature")}
         >
@@ -81,12 +85,12 @@ const CountryList = (props) => {
           {sortIcon[sortState["orderByTemperature"]]}
         </div>
       </div>
-      <div className={style.country_list_body}> 
+      <div className={style.country_list_body}>
         <ul>
           {currentCountryList.map((item, index) => {
-            return(
-              <div 
-                key={index} 
+            return (
+              <div
+                key={index}
                 className={style.country_list_item}
                 onClick={() => handleCurrentCountry(item)}
               >{item}</div>

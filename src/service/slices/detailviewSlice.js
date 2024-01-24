@@ -4,94 +4,76 @@ import axios from "axios";
 export const detailSlice = createSlice({
   name: "detail",
   initialState: {
-    countryList:{
-      orderByName:{
-        asc: [],
-        desc: []
-      },
-      orderByPopulation:{
-        asc: [],
-        desc: []
-      },
-      orderByTemperature: {
-        asc: [],
-        desc: []
-      }
-    },
-    currentRegionInforMation:{
-      region: "",
+    currentRegionInforMation: {
+      countryName: "",
+      regionType: "",
+      regionName: "",
+      latitude: "",
+      longtitude: "",
       temperatureList: [],
-      populationList: []
+      populationList: [],
+      cityList: [],
+      stateList: []
+    },
+  },
+  reducers: {
+    setRegionInformation(state, action) {
+      state.currentRegionInforMation = action.payload
     }
   },
-  reducers:{
-    setRegion(state, action){
-      state.currentRegionInforMation.region = action.payload
-    }
-  },
-  extraReducers:builder => {
-    builder.addCase(getAllCountriesList.fulfilled, (state, action) => {
-      state.countryList = action.payload;
-    })
-    .addCase(getRegionTemperatureAndPopulation.fulfilled, (state, action) => {
-      console.log(action.payload)
-      state.currentRegionInforMation.temperatureList = action.payload.currentRegionInforMation.temperatureList;
-      state.currentRegionInforMation.populationList = action.payload.currentRegionInforMation.populationList;
-    })
+  extraReducers: builder => {
+    builder
+      .addCase(getRegionTemperature.fulfilled, (state, action) => {
+        state.currentRegionInforMation.temperatureList = action.payload;
+      })
+      .addCase(getRegionPopulation.fulfilled, (state, action) => {
+        state.currentRegionInforMation.populationList = action.payload;
+      })
+      .addCase(getRegionsByCountry.fulfilled, (state, action) => {
+        state.currentRegionInforMation.cityList = action.payload.cityList;
+        state.currentRegionInforMation.stateList = action.payload.stateList;
+      })
   }
 })
 
-export const getAllCountriesList = createAsyncThunk('detail/getAllCountriesList', async () => {
-  const [
-    countryListOrderByNameAsc,
-    countryListOrderByNameDesc,
-    countryListOrderByPopulationAsc,
-    countryListOrderByPopulationDesc,
-    countryListOrderByTemperatureAsc,
-    countryListOrderByTemperatureDesc,
-  ] = await Promise.all([
-    axios.get('http://localhost:8080/api/country/get-all/order-by-name/asc'),
-    axios.get('http://localhost:8080/api/country/get-all/order-by-name/desc'),
-    axios.get('http://localhost:8080/api/population/all-countries/order-by-population/asc'),
-    axios.get('http://localhost:8080/api/population/all-countries/order-by-population/desc'),
-    axios.get('http://localhost:8080/api/temp/all-countries/order-by-temperature/asc'),
-    axios.get('http://localhost:8080/api/temp/all-countries/order-by-temperature/desc'),
-  ]);
+export const getPopulationDifference = createAsyncThunk('detail/getPopulationDifference', async () => {
 
-
-  return {
-    orderByName:{
-      asc: [...countryListOrderByNameAsc.data],
-      desc: [...countryListOrderByNameDesc.data]
-    },
-    orderByPopulation:{
-      asc: [...countryListOrderByPopulationAsc.data],
-      desc: [...countryListOrderByPopulationDesc.data]
-    },
-    orderByTemperature: {
-      asc: [...countryListOrderByTemperatureAsc.data],
-      desc: [...countryListOrderByTemperatureDesc.data]
-    }
-  };
 })
 
-export const getRegionTemperatureAndPopulation = createAsyncThunk('detail/getRegionTemperatureAndPopulation', async (region) => {
+export const getTemperatureDifference = createAsyncThunk('detail/getTemperatureDifference', async () => {
+
+})
+
+
+
+export const getRegionTemperature = createAsyncThunk('detail/getRegionTemperature', async (region) => {
+  const temperatureListResponse = region.countryName !== 'World' ? await
+    axios({
+      method: 'post',
+      url: `http://localhost:8080/api/temp/by-region`,
+      data: region,
+      headers: { 'Content-Type': 'application/json' }
+    })
+    : await axios.get(`http://localhost:8080/api/global-temp/get-all`)
+  return temperatureListResponse.data;
+})
+
+export const getRegionPopulation = createAsyncThunk('detail/getRegionPopulation', async (region) => {
+  const populationListResponse = await
+    axios.get(`http://localhost:8080/api/population/by-country?countryName=${region.countryName}`,)
+  return populationListResponse.data;
+})
+
+export const getRegionsByCountry = createAsyncThunk('detail/getRegionsByCountry', async (countryName) => {
   const [
-    temperatureList,
-    populationList
-  ] = region !== 'World' ? await Promise.all([
-    axios.get(`http://localhost:8080/api/temp/by-country?countryName=${region}`),
-    axios.get(`http://localhost:8080/api/population/by-country?countryName=${region}`),
-  ]): await Promise.all([
-    axios.get(`http://localhost:8080/api/global-temp/get-all`),
-    axios.get(`http://localhost:8080/api/population/world-population`),
+    cityListResponse,
+    stateListResponse
+  ] = await Promise.all([
+    axios.get(`http://localhost:8080/api/city/by-country?countryName=${countryName}`),
+    axios.get(`http://localhost:8080/api/state/by-country?countryName=${countryName}`),
   ]);
-
-
   return {
-    currentRegionInforMation:{
-      temperatureList: temperatureList.data,
-      populationList: populationList.data
-    }
+    cityList: cityListResponse.data,
+    stateList: stateListResponse.data,
   };
 })

@@ -99,8 +99,8 @@ export const getDataYearRange = createAsyncThunk('overview/getDataYearRange', as
   ]);
 
   return {
-    population: {...populationResponse.data},
-    global: {...globalTempResponse.data},
-    other: {...otherTempResponse.data}
+    population: { ...populationResponse.data },
+    global: { ...globalTempResponse.data },
+    other: { ...otherTempResponse.data }
   };
 })

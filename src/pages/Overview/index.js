@@ -30,7 +30,7 @@ const Overview = () => {
       title: {
         text: 'Global Population',
         style: {
-          fontSize: '40px' 
+          fontSize: '40px'
         }
       },
       xAxis: {
@@ -109,7 +109,7 @@ const Overview = () => {
           align: 'high'
         },
         labels: {
-            overflow: 'justify'
+          overflow: 'justify'
         },
       },
       series: [
@@ -131,7 +131,7 @@ const Overview = () => {
       <div className={style.overview_body}>
         <div className={`col-3`}></div>
         {Object.entries(numberOfRegions).map(([key, value]) => {
-          return(
+          return (
             <div className={`col-2 ${style.number_of_regions_cell}`}>
               NUMBER OF {key.toUpperCase()}
               <br></br>
@@ -145,18 +145,18 @@ const Overview = () => {
       <div className={style.overview_body}>
         <div className={`col-3`}></div>
         {Object.entries(dataYearRange).map(([key, value]) => {
-          return(
+          return (
             <div className={`col-2 ${style.year_range_cell}`}>
-            {key.toUpperCase()} {key !== "population" ? "TEMPERATURE DATA": "DATA"}
+              {key.toUpperCase()} {key !== "population" ? "TEMPERATURE DATA" : "DATA"}
               <br></br>
-              {value.start} - {value.end}
+              {value.startYear} - {value.endYear}
             </div>
           )
         })}
         <div className={`col-3`}></div>
       </div>
       {Object.entries(chartOptions).map(([key, value]) =>
-        <CustomChart options = {value}></CustomChart>
+        <CustomChart options={value}></CustomChart>
       )}
     </div>
 
