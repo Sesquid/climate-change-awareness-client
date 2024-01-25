@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import style from './style.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { countryListSelector, currentRegionSelector, locationListSelector, populationListSelector, temperatureListSelector } from '../../service/selector/selector';
@@ -13,6 +13,9 @@ import TempList from '../../component/TempTable';
 import PopulationTable from '../../component/PopulationTable';
 import CustomSelect from '../../component/CustomSelect';
 import { locationSlice } from '../../service/slices/locationSlice';
+const { performance } = window;
+
+
 const Detail = () => {
 
   const dispatch = useDispatch();
@@ -22,7 +25,7 @@ const Detail = () => {
   const temperatureList = useSelector(temperatureListSelector);
   const populationList = useSelector(populationListSelector);
   const locationList = useSelector(locationListSelector);
-
+  const i = useRef(0)
   const [detail, setDetail] = useState({
     keyWord: "",
     tab: "population",
@@ -61,7 +64,6 @@ const Detail = () => {
 
   const handleSelectTab = (tabName) => {
     setDetail(state => ({ ...detail, tab: tabName }))
-    // console.log(detail.currentDataList.temperatureList)
     dispatch(detailSlice.actions.setRegionInformation(({
       ...currentRegion, regionType: "country", regionName: ""
 
@@ -96,7 +98,6 @@ const Detail = () => {
       ...currentRegion, regionType: "city", regionName: name,
       latitude: latitude, longtitude: longtitude
     }))
-    console.log(e.target.value)
   }
 
   const handleSelectState = (e) => {
@@ -171,7 +172,6 @@ const Detail = () => {
           }))
         }
         else {
-          console.log()
           setDetail(state => ({
             ...detail, currentDataList: {
               ...detail.currentDataList,
@@ -182,17 +182,22 @@ const Detail = () => {
         }
 
         if (!temperatureList.hasOwnProperty(regionToFetch)) {
-          console.log(regionToFetch)
-          await dispatch(getRegionTemperature(regionInformation))
-          setDetail(state => ({
-            ...detail,
-            currentDataList: { ...detail.currentDataList, temperatureList: currentRegion.temperatureList }
-          }));
+          await dispatch(getRegionTemperature({
+            region: regionInformation,
+            startTime: Date.now()
+          }))
+          setDetail(state => {
+            // console.log(i.current++);
+            // console.log('setCurrentState ' + (Date.now() - currentRegion.startTime) + "ms")
+            return {
+              ...detail,
+              currentDataList: { ...detail.currentDataList, temperatureList: currentRegion.temperatureList }
+            }
+          });
           dispatch(temperatureSlice.actions.addTemperature({
             region: regionInformation,
             temperatureList: currentRegion.temperatureList
           }));
-          console.log(detail.currentDataList.temperatureList)
         }
         else {
 

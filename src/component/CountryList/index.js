@@ -41,7 +41,7 @@ const CountryList = (props) => {
   const handleCurrentCountry = (item) => {
     dispatch(detailSlice.actions.setRegionInformation({
       ...currentRegion, countryName: item, regionType: 'country',
-      latitude: "", longtitude: ""
+      latitude: "", longtitude: "", startTime: Date.now()
     }))
   }
 

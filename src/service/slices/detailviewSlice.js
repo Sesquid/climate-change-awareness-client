@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
+const { performance } = window
 export const detailSlice = createSlice({
   name: "detail",
   initialState: {
@@ -13,7 +13,8 @@ export const detailSlice = createSlice({
       temperatureList: [],
       populationList: [],
       cityList: [],
-      stateList: []
+      stateList: [],
+      startTime: ""
     },
   },
   reducers: {
@@ -24,7 +25,9 @@ export const detailSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(getRegionTemperature.fulfilled, (state, action) => {
-        state.currentRegionInforMation.temperatureList = action.payload;
+        state.currentRegionInforMation.temperatureList = action.payload.temperatureList;
+        console.log('setDataToStore ' + Date.now() - action.payload.startTime  + 'ms')
+
       })
       .addCase(getRegionPopulation.fulfilled, (state, action) => {
         state.currentRegionInforMation.populationList = action.payload;
@@ -46,7 +49,8 @@ export const getTemperatureDifference = createAsyncThunk('detail/getTemperatureD
 
 
 
-export const getRegionTemperature = createAsyncThunk('detail/getRegionTemperature', async (region) => {
+export const getRegionTemperature = createAsyncThunk('detail/getRegionTemperature', async (payload) => {
+  const { region, startTime } = payload
   const temperatureListResponse = region.countryName !== 'World' ? await
     axios({
       method: 'post',
@@ -55,7 +59,10 @@ export const getRegionTemperature = createAsyncThunk('detail/getRegionTemperatur
       headers: { 'Content-Type': 'application/json' }
     })
     : await axios.get(`http://localhost:8080/api/global-temp/get-all`)
-  return temperatureListResponse.data;
+  return {
+    temperatureList: temperatureListResponse.data,
+    startTime: startTime
+  };
 })
 
 export const getRegionPopulation = createAsyncThunk('detail/getRegionPopulation', async (region) => {
@@ -74,6 +81,6 @@ export const getRegionsByCountry = createAsyncThunk('detail/getRegionsByCountry'
   ]);
   return {
     cityList: cityListResponse.data,
-    stateList: stateListResponse.data,
+    stateList: stateListResponse.data
   };
 })
