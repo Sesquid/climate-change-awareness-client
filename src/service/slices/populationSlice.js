@@ -19,7 +19,7 @@ export const populationSlice = createSlice({
 
 // export const getRegionPopulation = createAsyncThunk('population/getRegionPopulation', async (region) => {
 //   const populationListResponse = await
-//     axios.get(`http://localhost:8080/api/population/by-country?countryName=${region.countryName}`,)
+//     axios.get(`https://climate-change-awareness-production.up.railway.app/api/population/by-country?countryName=${region.countryName}`,)
 //   return {
 //     region: region,
 //     populationList: populationListResponse.data

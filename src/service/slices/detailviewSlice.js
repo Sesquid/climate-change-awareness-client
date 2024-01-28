@@ -54,11 +54,11 @@ export const getRegionTemperature = createAsyncThunk('detail/getRegionTemperatur
   const temperatureListResponse = region.countryName !== 'World' ? await
     axios({
       method: 'post',
-      url: `http://localhost:8080/api/temp/by-region`,
+      url: `https://climate-change-awareness-production.up.railway.app/api/temp/by-region`,
       data: region,
       headers: { 'Content-Type': 'application/json' }
     })
-    : await axios.get(`http://localhost:8080/api/global-temp/get-all`)
+    : await axios.get(`https://climate-change-awareness-production.up.railway.app/api/global-temp/get-all`)
   return {
     temperatureList: temperatureListResponse.data,
     startTime: startTime
@@ -67,7 +67,7 @@ export const getRegionTemperature = createAsyncThunk('detail/getRegionTemperatur
 
 export const getRegionPopulation = createAsyncThunk('detail/getRegionPopulation', async (region) => {
   const populationListResponse = await
-    axios.get(`http://localhost:8080/api/population/by-country?countryName=${region.countryName}`,)
+    axios.get(`https://climate-change-awareness-production.up.railway.app/api/population/by-country?countryName=${region.countryName}`,)
   return populationListResponse.data;
 })
 
@@ -76,8 +76,8 @@ export const getRegionsByCountry = createAsyncThunk('detail/getRegionsByCountry'
     cityListResponse,
     stateListResponse
   ] = await Promise.all([
-    axios.get(`http://localhost:8080/api/city/by-country?countryName=${countryName}`),
-    axios.get(`http://localhost:8080/api/state/by-country?countryName=${countryName}`),
+    axios.get(`https://climate-change-awareness-production.up.railway.app/api/city/by-country?countryName=${countryName}`),
+    axios.get(`https://climate-change-awareness-production.up.railway.app/api/state/by-country?countryName=${countryName}`),
   ]);
   return {
     cityList: cityListResponse.data,

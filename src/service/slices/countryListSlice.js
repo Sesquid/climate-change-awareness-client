@@ -40,12 +40,12 @@ export const getAllCountriesList = createAsyncThunk('countryList/getAllCountries
     countryListOrderByTemperatureAsc,
     countryListOrderByTemperatureDesc,
   ] = await Promise.all([
-    axios.get('http://localhost:8080/api/country/get-all/order-by-name?order=asc'),
-    axios.get('http://localhost:8080/api/country/get-all/order-by-name?order=desc'),
-    axios.get('http://localhost:8080/api/population/all-countries/order-by-population?order=asc'),
-    axios.get('http://localhost:8080/api/population/all-countries/order-by-population?order=desc'),
-    axios.get('http://localhost:8080/api/temp/all-countries/order-by-temperature?order=asc'),
-    axios.get('http://localhost:8080/api/temp/all-countries/order-by-temperature?order=desc'),
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/country/get-all/order-by-name?order=asc'),
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/country/get-all/order-by-name?order=desc'),
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/population/all-countries/order-by-population?order=asc'),
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/population/all-countries/order-by-population?order=desc'),
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/temp/all-countries/order-by-temperature?order=asc'),
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/temp/all-countries/order-by-temperature?order=desc'),
   ]);
 
 

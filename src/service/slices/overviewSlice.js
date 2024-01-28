@@ -49,7 +49,7 @@ export const overviewSlice = createSlice({
 export const getWorldPopulation = createAsyncThunk('overview/getWorldPopulation', async () => {
   const response = await axios({
     method: "get",
-    url: "http://localhost:8080/api/population/world-population"
+    url: "https://climate-change-awareness-production.up.railway.app/api/population/world-population"
   })
   return response.data;
 })
@@ -57,7 +57,7 @@ export const getWorldPopulation = createAsyncThunk('overview/getWorldPopulation'
 export const getAllCountriesPopulation = createAsyncThunk('overview/getAllCountriesPopulation', async () => {
   const response = await axios({
     method: 'get',
-    url: 'http://localhost:8080/api/population/all-countries-population/?year=2013'
+    url: 'https://climate-change-awareness-production.up.railway.app/api/population/all-countries-population/?year=2013'
   })
   return response.data;
 })
@@ -65,7 +65,7 @@ export const getAllCountriesPopulation = createAsyncThunk('overview/getAllCountr
 export const getGlobalTempData = createAsyncThunk('overview/getGlobalTempData', async () => {
   const response = await axios({
     method: "get",
-    url: "http://localhost:8080/api/global-temp/get-all"
+    url: "https://climate-change-awareness-production.up.railway.app/api/global-temp/get-all"
   })
   return response.data;
 })
@@ -76,9 +76,9 @@ export const getNumberOfRegions = createAsyncThunk('overview/getNumberOfRegions'
     numberOfStatesResponse,
     numberOfCountriesResponse
   ] = await Promise.all([
-    axios.get('http://localhost:8080/api/city/number-of-cities'),
-    axios.get('http://localhost:8080/api/state/number-of-states'),
-    axios.get('http://localhost:8080/api/country/number-of-countries')
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/city/number-of-cities'),
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/state/number-of-states'),
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/country/number-of-countries')
   ]);
   return {
     cities: numberOfCitiesResponse.data,
@@ -93,9 +93,9 @@ export const getDataYearRange = createAsyncThunk('overview/getDataYearRange', as
     globalTempResponse,
     otherTempResponse
   ] = await Promise.all([
-    axios.get('http://localhost:8080/api/population/year-range'),
-    axios.get('http://localhost:8080/api/global-temp/year-range'),
-    axios.get('http://localhost:8080/api/temp/year-range')
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/population/year-range'),
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/global-temp/year-range'),
+    axios.get('https://climate-change-awareness-production.up.railway.app/api/temp/year-range')
   ]);
 
   return {

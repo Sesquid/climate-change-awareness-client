@@ -32,8 +32,8 @@ export const temperatureSlice = createSlice({
 
 export const getTemperatureListByCountryName = createAsyncThunk('temperature/getTemperatureListByCountryName', async (countryName) => {
   const temperatureListResponse = countryName !== 'World' ?
-    await axios.get(`http://localhost:8080/api/temp/by-country?countryName=${countryName}`)
-    : await axios.get(`http://localhost:8080/api/global-temp/get-all`)
+    await axios.get(`https://climate-change-awareness-production.up.railway.app/api/temp/by-country?countryName=${countryName}`)
+    : await axios.get(`https://climate-change-awareness-production.up.railway.app/api/global-temp/get-all`)
 
   return {
     countryName: countryName,
