@@ -15,7 +15,7 @@ const TempList = (props) => {
         </tr>
       </thead>
       <tbody>
-        {tempList.map((item) => {
+        {tempList.map((item, index) => {
           return (
             <tr key={item.id}>
               <td>{item.year}</td>

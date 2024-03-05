@@ -30,9 +30,14 @@ input:focus {
 .year_select {
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  text-align: center;
 }
 
 select,
 button {
   margin-right: 10px !important;
+}
+.information_site {
+  padding: 10px;
 }

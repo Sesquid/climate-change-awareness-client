@@ -1,26 +1,27 @@
-import { Provider } from 'react-redux';
 import './App.css';
 import React from 'react';
-import { store } from './service/store/store';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Header from './component/Header';
+import Header from './components/Header';
 import Overview from './pages/Overview';
 import Detail from './pages/Detail';
-
+import { QueryClient, QueryClientProvider } from 'react-query';
+import SimilarRegionModal from './components/SimilarRegionModal';
 function App() {
+  const queryClient = new QueryClient();
   return (
-    <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <div className="App">
           <Header></Header>
+          {/* <SimilarRegionModal></SimilarRegionModal> */}
           <Routes>
-            <Route path='/header' element={<Header></Header>}></Route>
+            <Route path='/' element={<div style={{ display: "flex", justifyContent: "center", fontSize: "2rem", fontWeight: "600" }}>Welcome</div>}></Route>
             <Route path='/overview' element={<Overview></Overview>}></Route>
             <Route path='/detail' element={<Detail></Detail>}></Route>
           </Routes>
         </div>
       </BrowserRouter>
-    </Provider>
+    </QueryClientProvider>
   );
 }
 
