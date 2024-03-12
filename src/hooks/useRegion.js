@@ -1,6 +1,5 @@
 import { useQuery } from 'react-query';
 import axiosInstance from '../lib/api';
-import { checkNull, checkRegionNull } from '../util/util';
 
 export const useRegionNumber = () => {
   return useQuery({

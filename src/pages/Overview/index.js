@@ -1,12 +1,10 @@
-
 import style from "./style.module.css"
-import CustomChart from '../../components/Chart';
 import Loading from "../../components/Loading";
 import { useRegionNumber } from "../../hooks/useRegion";
 import { useYearRange } from "../../hooks/useYearRange";
 import { useAllCountriesPopulation, useCountryPopulation } from "../../hooks/usePopulation";
 import { useWorldTemperature } from "../../hooks/useTemperature";
-import { useEffect, useState } from "react";
+import { PopulationChart, TemperatureChart, WorldPopulationRanking } from "../../components/CustomRechart";
 const Overview = () => {
 
   const { data: numberOfRegions, isLoading: isNumberOfRegionsLoading } = useRegionNumber();
@@ -14,120 +12,6 @@ const Overview = () => {
   const { data: worldPopulation, isLoading: isWorldPopulationLoading } = useCountryPopulation("WLD");
   const { data: worldTemperature, isLoading: isWorldTemperatureLoading } = useWorldTemperature();
   const { data: allCountriesPopulation, isLoading: isAllCountriesPopulationLoading } = useAllCountriesPopulation(2013);
-  const [chartOptions, setChartOptions] = useState({})
-
-  useEffect(() => {
-    if (worldPopulation, worldTemperature, allCountriesPopulation)
-      setChartOptions({
-        worldPopulation: {
-          accessibility: {
-            enabled: false
-          },
-          chart: {
-            type: 'column'
-          },
-          title: {
-            text: 'Global Population',
-            style: {
-              fontSize: '40px'
-            }
-          },
-          xAxis: {
-            type: "category",
-            categories: worldPopulation.map((item) => item.year)
-          },
-          yAxis: [
-            {
-              name: "Population",
-              opposite: false,
-              min: 0,
-              max: 7500000000
-            }
-          ],
-          series: [
-            {
-              color: "rgb(255, 218, 149)",
-              name: 'Population',
-              data: worldPopulation.map(item => item.population),
-            }
-          ]
-        },
-        worldTemperature: {
-          accessibility: {
-            enabled: false
-          },
-          chart: {
-            type: 'column'
-          },
-          title: {
-            text: 'Global Average Temperature',
-            style: {
-              fontSize: '40px'
-            }
-          },
-          xAxis: {
-            type: "category",
-            categories: worldTemperature.filter(item => item.year % 2 === 1).map(item => item.year)
-          },
-          yAxis: [
-            {
-              name: "Temperature",
-              opposite: false,
-              min: 0,
-              max: 10
-            }
-          ],
-          series: [
-            {
-              color: "rgb(255, 218, 149)",
-              name: 'Temperature',
-              data: worldTemperature.filter(item => item.year % 2 === 1).map(item => item.avgTemp),
-            }
-          ]
-        },
-        allCountriesPopulation: {
-          accessibility: {
-            enabled: false
-          },
-          chart: {
-            height: 1200,
-            type: 'bar'
-          },
-          title: {
-            text: 'World Population Rank in 2013',
-            style: {
-              fontSize: '40px'
-            }
-          },
-          xAxis: {
-            categories: allCountriesPopulation.map(item => item.countryName),
-            gridLineWidth: 1,
-            lineWidth: 0
-          },
-          yAxis: {
-            name: "Population",
-            opposite: false,
-            min: 0,
-            max: 1800000000,
-            title: {
-              text: 'Population (millions)',
-              align: 'high'
-            },
-            labels: {
-              overflow: 'justify'
-            },
-          },
-          series: [
-            {
-              color: "rgb(255, 218, 149)",
-              name: 'Population',
-              data: allCountriesPopulation.map(item => item.population),
-              pointWidth: 10,
-            }
-          ]
-        }
-      })
-  }, [worldPopulation, worldTemperature, allCountriesPopulation])
 
   if (isNumberOfRegionsLoading || isYearRangeLoading || isWorldPopulationLoading
     || isWorldTemperatureLoading || isAllCountriesPopulationLoading) {
@@ -165,9 +49,22 @@ const Overview = () => {
         })}
         <div className={`col-3`}></div>
       </div>
-      {Object.entries(chartOptions).map(([key, value]) =>
-        <CustomChart key={key} options={value}></CustomChart>
-      )}
+      <div className={style.chart_site}>
+        <PopulationChart
+          dataList={worldPopulation}
+          chartTitle="World Population"
+          domain={[2000000000, 7230000000]}
+        ></PopulationChart>
+        <TemperatureChart
+          dataList={worldTemperature}
+          chartTitle="World Temperature"
+          domain={[-3, 20]}
+        ></TemperatureChart>
+        <WorldPopulationRanking
+          dataList={allCountriesPopulation}
+          chartTitle="World Population Ranking in 2013"
+        ></WorldPopulationRanking>
+      </div>
     </div>
 
   )

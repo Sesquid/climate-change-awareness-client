@@ -1,5 +1,3 @@
-import { useCountryCity, useCountryState } from "../hooks/useRegion";
-
 export const formatNumber = (number) => {
   return new Intl.NumberFormat().format(number)
 }

@@ -8,13 +8,13 @@ import CustomSelect from '../../components/CustomSelect';
 import { useCountry, useCountryCity, useCountryState } from '../../hooks/useRegion';
 import { useCountryPopulation, usePopulationDifference } from '../../hooks/usePopulation';
 import { useCountryTemperature, useCountryTemperatureDifference, useRegionAverageTemperatureInTimePeriod } from '../../hooks/useTemperature';
-// import { CustomRechart } from '../../components/CustomRechart';
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { isIllegalNumber, isIllegalTemperature } from '../../util/util';
 import SimilarRegionModal from '../../components/SimilarRegionModal';
 import PopulationDiff from './PopulationDiff';
 import TemperatureDiff from './TemperatureDiff';
 import RegionAvgTempTable from '../../components/RegionAvgTempTable';
+import { PopulationChart, TemperatureChart } from '../../components/CustomRechart';
 
 const Detail = () => {
 
@@ -187,7 +187,6 @@ const Detail = () => {
       timePeriod: regionInformation.timePeriod
     }
     let newAvgTempList = [...avgTempListByTimePeriod]
-    // console.log(avgTemp)
     newAvgTempList.push(avgTemp);
     setAvgTempListByTimePeriod([...newAvgTempList])
   }
@@ -212,14 +211,12 @@ const Detail = () => {
               handleSelectCountry={handleSelectCountry}
             ></CountryList>
           </div>
-
           <div className={`col-9`}>
             <hr></hr>
             <button className='btn btn-warning' onClick={() => { handleChangeTab("population") }}>Population</button>
             <button className='btn btn-danger' onClick={() => { handleChangeTab("temperature") }}>Temperature</button>
             <hr></hr>
             <div className={style.region_name}>{currentCountry.countryName + " " + detail.tab}</div>
-
             {detail.tab === 'temperature' ?
               (
                 <>
@@ -286,7 +283,7 @@ const Detail = () => {
                     stateList={stateList}
                   ></SimilarRegionModal>}
                   <button className='btn btn-warning'
-                    disabled={regionInformation.startYear === 0}
+                    disabled={true}
                     onClick={() => {
                       handleFindSimilarRegion(true)
 
@@ -356,32 +353,20 @@ const Detail = () => {
                       popList={populationList ?? []}
                     ></PopulationTable>
                   ) : (
-                    <ResponsiveContainer height={600} width="100%">
-                      <BarChart data={populationList}
-                        margin={{ left: 35 }}>
-                        <Bar dataKey="population" fill="green" />
-                        <XAxis dataKey="year" />
-                        <YAxis />
-                      </BarChart>
-                    </ResponsiveContainer>
+                    <PopulationChart
+                      dataList={populationList ?? []}
+                      chartTitle={""}
+                    ></PopulationChart>
                   )
                 : detail.inforDisplayWay === 'table' ? (
                   <TempList
                     tempList={temperatureList ?? []}
                   ></TempList>
                 ) : (
-                  <ResponsiveContainer height={600} width="100%">
-                    <LineChart data={temperatureList}
-                      margin={{ left: 35 }}>
-                      <Line dataKey="avgTemp" fill="green" />
-                      <Line dataKey="minTemp" fill="green" />
-                      <Line dataKey="maxTemp" fill="green" />
-                      <XAxis dataKey="year" />
-                      <YAxis />
-                    </LineChart>
-                  </ResponsiveContainer>
+                  <TemperatureChart
+                    dataList={temperatureList ?? []}
+                  ></TemperatureChart>
                 )
-
               }
             </div>
           </div>
